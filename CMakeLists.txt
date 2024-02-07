@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(mailclient VERSION 0.1 LANGUAGES CXX)
+project(emailclient VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 20)
@@ -43,13 +43,13 @@ set(SOURCES mailsettings.cpp
             src/models/modelfactory.cpp
             src/models/mailmodel.cpp)
 
-qt_add_executable(appmailclient
+qt_add_executable(emailclient
     main.cpp
     ${HEADERS}
     ${SOURCES}
 )
 
-qt_add_qml_module(appmailclient
+qt_add_qml_module(emailclient
     URI mailclient
     VERSION 1.0
     QML_FILES main.qml
@@ -60,19 +60,19 @@ qt_add_qml_module(appmailclient
     QML_FILES FolderListDelegate.qml
 )
 
-target_link_directories(appmailclient PRIVATE $ENV{CMAKE_SYSROOT}/usr/lib)
+target_link_directories(emailclient PRIVATE $ENV{CMAKE_SYSROOT}/usr/lib)
 
-target_include_directories(appmailclient PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(emailclient PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
                     ${CMAKE_CURRENT_SOURCE_DIR}/include/models
                     ${CMAKE_CURRENT_SOURCE_DIR}/include/parsers)
 
-target_link_libraries(appmailclient
+target_link_libraries(emailclient
     PRIVATE Qt6::Quick Qt6::Sql curl SettingsLib LogLibrary)
 
 
-install(TARGETS appmailclient
+install(TARGETS emailclient
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 

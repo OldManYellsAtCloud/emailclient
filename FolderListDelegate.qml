@@ -16,7 +16,7 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            mailListView.model.setFolder(folderLabel.text)
+            modelFactory.getMailModel().setFolder(folderLabel.text)
             drawer.close()
         }
     }

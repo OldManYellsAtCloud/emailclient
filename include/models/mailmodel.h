@@ -6,7 +6,7 @@
 #include <memory>
 #include "mailengine.h"
 
-#define BODY_FILE_PATH "/tmp/emailbody"
+#define BODY_FILE_PATH "/tmp/emailbody.html"
 
 class MailModel : public QAbstractListModel
 {

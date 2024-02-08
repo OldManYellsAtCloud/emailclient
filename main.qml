@@ -8,6 +8,12 @@ Window {
     height: 480
     visible: true
 
+    StackView {
+        id: stackView
+        anchors.fill: parent
+        initialItem: MailList {}
+    }
+
     MessageDialog {
         id: notImplemented
         title: "Not implemented"
@@ -19,7 +25,7 @@ Window {
         id: modelFactory
     }
 
-    ListView {
+/*    ListView {
         id: mailListView
         anchors.fill: parent
         model: modelFactory.getMailModel()
@@ -28,7 +34,7 @@ Window {
             subject: model.subject
             mailDate: new Date(model.date * 1000).toLocaleString(Qt.locale("de_DE"), "yyyy-MM-dd hh:mm")
         }
-    }
+    }*/
 
     Drawer {
         id: drawer

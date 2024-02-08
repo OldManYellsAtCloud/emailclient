@@ -16,13 +16,6 @@ Rectangle {
     border.color: "grey"
     border.width: 1
 
-    MessageDialog {
-        id: indexTest
-        title: "Not implemented"
-        buttons: Dialog.Ok
-        onAccepted: {}
-    }
-
     Text {
         id: mailDate
         font.pixelSize: recipient_or_sender.font.pixelSize
@@ -61,9 +54,9 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            model.expo
-            indexTest.title = "whatev " + model.index
-            indexTest.open()
+            modelFactory.getMailModel().exportBody(model.index)
+            stackView.push("MailContent.qml")
+
         }
     }
 }

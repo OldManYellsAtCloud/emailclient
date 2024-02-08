@@ -6,7 +6,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.2 COMPONENTS Quick Sql REQUIRED)
+find_package(Qt6 6.2 COMPONENTS Quick Sql WebView WebEngineQuick REQUIRED)
 
 set(HEADERS include/mailsettings.h
             include/curlresponse.h
@@ -58,6 +58,8 @@ qt_add_qml_module(emailclient
     SOURCES include/models/modelfactory.h src/models/modelfactory.cpp
     QML_FILES MailHeader.qml
     QML_FILES FolderListDelegate.qml
+    QML_FILES MailList.qml
+    QML_FILES MailContent.qml
 )
 
 target_link_directories(emailclient PRIVATE $ENV{CMAKE_SYSROOT}/usr/lib)
@@ -69,7 +71,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
                     ${CMAKE_CURRENT_SOURCE_DIR}/include/parsers)
 
 target_link_libraries(emailclient
-    PRIVATE Qt6::Quick Qt6::Sql curl SettingsLib LogLibrary)
+    PRIVATE Qt6::Quick Qt6::Sql Qt6::WebEngineQuick curl SettingsLib LogLibrary)
 
 
 install(TARGETS emailclient
@@ -92,7 +94,7 @@ if (enable_test)
 
 
     target_link_directories(mailclient_test PRIVATE $ENV{CMAKE_SYSROOT}/usr/lib)
-    target_link_libraries(mailclient_test GTest::gtest_main Qt6::Quick Qt6::Sql curl SettingsLib LogLibrary)
+    target_link_libraries(mailclient_test GTest::gtest_main Qt6::Quick Qt6::Sql Qt6::WebEngineQuick curl SettingsLib LogLibrary)
 
     target_include_directories(mailclient_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

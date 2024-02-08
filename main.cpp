@@ -1,6 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
+#include <QtWebEngineQuick/QtWebEngineQuick>
+
 #include "mailsettings.h"
 #include "mailengine.h"
 #include "models/foldermodel.h"
@@ -22,6 +24,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<ModelFactory>("sgy.pine.mail", 1, 0, "ModelFactory");
     qmlRegisterType<MailModel>("sgy.pine.mail", 1, 0, "MailModel");
 
+    QtWebEngineQuick::initialize();
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
@@ -32,6 +35,7 @@ int main(int argc, char *argv[])
                 QCoreApplication::exit(-1);
         }, Qt::QueuedConnection);
     engine.load(url);
+
 
     return app.exec();
 }

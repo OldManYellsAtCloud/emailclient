@@ -26,13 +26,13 @@ set(HEADERS include/mailsettings.h
             include/models/mailmodel.h
             include/models/modelfactory.h)
 
-set(SOURCES mailsettings.cpp
-            curlresponse.cpp
-            dbengine.cpp
-            utils.cpp
+set(SOURCES src/mailsettings.cpp
+            src/curlresponse.cpp
+            src/dbengine.cpp
+            src/utils.cpp
             MailStructure.cpp
             src/parsers/imap/examine.cpp
-            mailengine.cpp
+            src/mailengine.cpp
             src/parsers/imap/folderlist.cpp
             src/parsers/imap/capability.cpp
             src/parsers/imap/mailheader.cpp

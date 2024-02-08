@@ -44,14 +44,16 @@ bool isError(CURLcode err, std::string msg){
 
 std::string extractDateWithoutTimeZone(const std::string& date){
     size_t lastSpace = date.find_last_of(' ');
-    size_t secondToLastSpace = date.find_last_of(' ', lastSpace - 1);
-    return date.substr(0, secondToLastSpace);
+    //size_t secondToLastSpace = date.find_last_of(' ', lastSpace - 1);
+    //return date.substr(0, secondToLastSpace);
+    return date.substr(0, lastSpace);
 }
 
 std::string extractTimeZone(const std::string& date){
     size_t lastSpace = date.find_last_of(' ');
-    size_t secondToLastSpace = date.find_last_of(' ', lastSpace - 1);
-    return date.substr(secondToLastSpace + 1, lastSpace - secondToLastSpace - 1);;
+    //size_t secondToLastSpace = date.find_last_of(' ', lastSpace - 1);
+    //return date.substr(secondToLastSpace + 1, lastSpace - secondToLastSpace - 1);;
+    return date.substr(lastSpace + 1);
 }
 
 std::tm adjustTimeWithTimeZone(std::tm t, std::string timeZone){
@@ -75,15 +77,20 @@ std::tm adjustTimeWithTimeZone(std::tm t, std::string timeZone){
     return t;
 }
 
+//date: "Wed, 7 Feb 2024 15:22:06 +0100"
+//timezone: "15:22:06"
+
+
 uint32_t dateStringToInt(std::string& date){
     std::tm t{};
     std::string timeZone = extractTimeZone(date);
     std::string dateWithoutTimeZone = extractDateWithoutTimeZone(date);
 
     std::stringstream ss{dateWithoutTimeZone};
-    ss >> std::get_time(&t, "Date: %a, %d %b %Y %T");
+    //ss >> std::get_time(&t, "Date: %a, %d %b %Y %T");
+    ss >> std::get_time(&t, "%a, %d %b %Y %T");
 
-    t = adjustTimeWithTimeZone(t, timeZone);
+//    t = adjustTimeWithTimeZone(t, timeZone);
     auto timeSinceEpoch = mktime(&t);
 
     return timeSinceEpoch;

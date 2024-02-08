@@ -6,6 +6,8 @@
 #include <memory>
 #include "mailengine.h"
 
+#define BODY_FILE_PATH "/tmp/emailbody"
+
 class MailModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -14,12 +16,14 @@ class MailModel : public QAbstractListModel
     QHash<int, QByteArray> m_roleNames;
     std::vector<mail> mails;
 
+
 public:
     explicit MailModel(std::shared_ptr<MailEngine> me, QObject *parent = nullptr);
     MailModel(QObject *parent);
     Q_INVOKABLE void setFolder(QString newFolder);
     Q_INVOKABLE void fetchNewMails();
     Q_INVOKABLE void setUnreadMailFlag();
+    Q_INVOKABLE void exportBody(int idx);
 
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;

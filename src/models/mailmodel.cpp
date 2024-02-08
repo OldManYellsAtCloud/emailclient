@@ -5,6 +5,18 @@ MailModel::MailModel(QObject *parent)
     : QAbstractListModel{parent}
 {}
 
+void MailModel::exportBody(int idx)
+{
+    std::string bodyContent = mails.at(idx).getBody();
+    bodyContent = decodeBase64Sections(bodyContent);
+
+    QFile f{BODY_FILE_PATH};
+    f.open(QIODevice::ReadWrite | QIODevice::Truncate);
+    QTextStream qts(&f);
+    qts << QString::fromStdString(bodyContent);
+    f.close();
+}
+
 MailModel::MailModel(std::shared_ptr<MailEngine> me, QObject *parent): QAbstractListModel{parent}
 {
     mengine = me;
@@ -62,9 +74,9 @@ QVariant MailModel::data(const QModelIndex &index, int role) const
         s = decodeBase64Sections(s);
         return QString::fromStdString(s);
     case MailModel::bodyRole:
-        s = m.getBody();
-        s = decodeBase64Sections(s);
-        return QString::fromStdString(s);
+        //exportBody(index.row());
+        //return QString::fromStdString(s);
+        return QVariant();
     case MailModel::fromRole:
         s = m.getFrom();
         s = decodeBase64Sections(s);

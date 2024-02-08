@@ -366,6 +366,10 @@ std::vector<mail> MailEngine::fetchCachedMailsFromFolder(std::string folder)
         mail m = dbEngine->retrieveEmail(folder, uid);
         ret.push_back(m);
     }
+
+    auto emailSorter = [](mail& a, mail& b)->bool{return a.getDate() > b.getDate();};
+    std::sort(ret.begin(), ret.end(), emailSorter);
+
     return ret;
 }
 

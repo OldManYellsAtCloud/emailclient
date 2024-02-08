@@ -1,4 +1,6 @@
 import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs
 
 Rectangle {
     id: mailListRoot
@@ -14,17 +16,11 @@ Rectangle {
     border.color: "grey"
     border.width: 1
 
-
-    Text {
-        id: recipient_or_sender
-        font.pixelSize: 15
-        font.bold: true
-        color: "black"
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.left: mailDate.right
-        horizontalAlignment: Text.AlignRight
-        elide: Text.ElideLeft
+    MessageDialog {
+        id: indexTest
+        title: "Not implemented"
+        buttons: Dialog.Ok
+        onAccepted: {}
     }
 
     Text {
@@ -40,6 +36,18 @@ Rectangle {
     }
 
     Text {
+        id: recipient_or_sender
+        font.pixelSize: 15
+        font.bold: true
+        color: "black"
+        anchors.top: mailDate.bottom
+        anchors.right: parent.right
+        anchors.left: mailDate.right
+        horizontalAlignment: Text.AlignRight
+        elide: Text.ElideLeft
+    }
+
+    Text {
         id: subject
         font.bold: false
         font.pixelSize: 15
@@ -48,5 +56,14 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         elide: Text.ElideRight
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: {
+            model.expo
+            indexTest.title = "whatev " + model.index
+            indexTest.open()
+        }
     }
 }

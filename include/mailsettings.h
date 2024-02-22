@@ -19,6 +19,7 @@ public:
     QString getDbPath();
     int getMailNumberToFetch();
     QStringList getWatchedFolders();
+    int getImapRequestDelay();
     bool isValid;
 
 };

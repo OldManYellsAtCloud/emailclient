@@ -58,3 +58,13 @@ QStringList MailSettings::getWatchedFolders()
     return folders;
 }
 
+int MailSettings::getImapRequestDelay()
+{
+    try {
+        return std::stoi(settings.getValue("mail", "imapRequestDelay"));
+    } catch (std::exception e) {
+        ERROR("Could not get imapRequestDelay config: {}", e.what());
+        return 0;
+    }
+}
+

@@ -5,6 +5,7 @@
 #include <QUrl> // for percent encoding
 #include <filesystem> // for temp folder
 #include <regex>
+#include <thread>
 
 #define IMAP_DEFAULT_PORT 143
 #define IMAPS_DEFAULT_PORT 993
@@ -42,6 +43,10 @@ bool isCurlError(CURLcode err, std::string msg){
 MailEngine::MailEngine() {
     mailSettings = std::make_unique<MailSettings>();
     dbEngine = std::make_unique<DbEngine>(mailSettings->getDbPath().toStdString());
+
+    imapRequestDelayMs = mailSettings->getImapRequestDelay();
+    lastRequestTime = std::chrono::steady_clock::now();
+
     initializeCurl();
     std::string unreadEmailFlagPath = std::format("{}/{}", std::filesystem::temp_directory_path().string(), "unreadMailFlag");
     unreadEmailFlag = new QFile(QString::fromStdString(unreadEmailFlagPath));
@@ -52,6 +57,18 @@ MailEngine::~MailEngine()
     delete unreadEmailFlag;
 }
 
+
+void MailEngine::waitForRateLimit()
+{
+    std::chrono::time_point<std::chrono::steady_clock> now = std::chrono::steady_clock::now();
+    auto diffSinceLastRequest = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastRequestTime);
+
+    if (diffSinceLastRequest.count() < imapRequestDelayMs) {
+        auto sleepBeforeNextRequest = imapRequestDelayMs - diffSinceLastRequest.count();
+        DEBUG("Rate limit, sleep {}ms", sleepBeforeNextRequest);
+        std::this_thread::sleep_for(std::chrono::milliseconds(sleepBeforeNextRequest));
+    }
+}
 
 void MailEngine::initializeCurl()
 {
@@ -132,6 +149,10 @@ std::string MailEngine::parseBodyContentOnly(const std::string &bodyResponse)
 
 CURLcode MailEngine::performCurlRequest()
 {
+
+    waitForRateLimit();
+    lastRequestTime = std::chrono::steady_clock::now();
+
     auto res = curl_easy_perform(curl);
 
     if (isCurlError(res, __FUNCTION__)){

@@ -2,6 +2,7 @@
 #define MAILENGINE_H
 
 #include <curl/curl.h>
+#include <chrono>
 #include "parsers/imap/examine.h"
 #include "parsers/imap/folderlist.h"
 #include "parsers/imap/capability.h"
@@ -30,6 +31,10 @@ private:
     std::string serverAddress;
     QFile *unreadEmailFlag;
 
+    std::chrono::time_point<std::chrono::steady_clock> lastRequestTime;
+    int imapRequestDelayMs = 0;
+
+    void waitForRateLimit();
     void initializeCurl();
     void configureImap();
     void prepareCurlRequest(const std::string& url, const std::string& customRequest = "");
@@ -38,6 +43,7 @@ private:
     std::string parseBodyContentOnly(const std::string& bodyResponse);
 
     CURLcode performCurlRequest();
+
 public:
     MailEngine();
     ~MailEngine();

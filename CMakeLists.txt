@@ -71,7 +71,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
                     ${CMAKE_CURRENT_SOURCE_DIR}/include/parsers)
 
 target_link_libraries(emailclient
-    PRIVATE Qt6::Quick Qt6::Sql Qt6::WebEngineQuick curl SettingsLib LogLibrary)
+    PRIVATE Qt6::Quick Qt6::Sql Qt6::WebView Qt6::WebEngineQuick curl SettingsLib LogLibrary)
 
 
 install(TARGETS emailclient
@@ -106,3 +106,5 @@ if (enable_test)
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 endif()
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")

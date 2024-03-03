@@ -21,6 +21,7 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         url: "file:///tmp/emailbody.html"
+        settings.javaScriptEnabled: false
     }
 
 

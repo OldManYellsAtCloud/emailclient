@@ -28,6 +28,11 @@ QString MailSettings::getUserName()
     return QString::fromStdString(settings.getValue("mail", "userName"));
 }
 
+QString MailSettings::getApplicationUser()
+{
+    return QString::fromStdString(settings.getValue("general", "applicationUser"));
+}
+
 QString MailSettings::getPassword()
 {
     auto passwordBase64 = settings.getValue("mail", "password");

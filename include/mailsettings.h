@@ -17,6 +17,7 @@ public:
     QString getUserName();
     QString getPassword();
     QString getDbPath();
+    QString getApplicationUser();
     int getMailNumberToFetch();
     QStringList getWatchedFolders();
     int getImapRequestDelay();

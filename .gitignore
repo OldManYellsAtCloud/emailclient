@@ -1,1 +1,6 @@
+build/*
 CMakeLists.txt.user*
+remote_gdb.sh
+gdb.config
+*kdev4
+connect_to_remote_gdb.sh

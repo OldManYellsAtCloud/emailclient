@@ -25,6 +25,10 @@ Window {
         id: modelFactory
     }
 
+    BusyIndicator {
+        running: modelFactory.getMailModel().busyLoading
+    }
+
 
 
     Drawer {

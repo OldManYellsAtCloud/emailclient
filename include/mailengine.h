@@ -1,20 +1,16 @@
 #ifndef MAILENGINE_H
 #define MAILENGINE_H
 
-#include <curl/curl.h>
-#include <chrono>
-#include "parsers/imap/examine.h"
 #include "parsers/imap/folderlist.h"
-#include "parsers/imap/capability.h"
 #include "parsers/imap/mailheader.h"
 #include "parsers/imap/bodystructures.h"
 #include "parsers/imap/flags.h"
 #include "parsers/imap/uid.h"
 
-#include "curlresponse.h"
 #include "mailsettings.h"
 
 #include "dbengine.h"
+#include "imaprequests.h"
 
 #include "mail.h"
 
@@ -25,36 +21,17 @@ class MailEngine : public QObject
     Q_OBJECT
 private:
     std::unique_ptr<DbEngine> dbEngine;
-    CURL *curl;
-    curlResponse body, header;
+
     std::unique_ptr<MailSettings> mailSettings;
-    std::string serverAddress;
     QFile *unreadEmailFlag;
-
-    std::chrono::time_point<std::chrono::steady_clock> lastRequestTime;
-    int imapRequestDelayMs = 0;
-
-    void waitForRateLimit();
-    void initializeCurl();
-    void configureImap();
-    void prepareCurlRequest(const std::string& url, const std::string& customRequest = "");
 
     int getBodyStructureIndex(BodyStructures& bs, const std::string& type, const std::string& subType);
     std::string parseBodyContentOnly(const std::string& bodyResponse);
-
-    CURLcode performCurlRequest();
+    std::unique_ptr<ImapRequest> imapRequest;
 
 public:
     MailEngine();
     ~MailEngine();
-    bool NOOP();
-    Capability CAPABILITY();
-    bool ENABLE(std::string capability);
-    Examine EXAMINE(std::string folder);
-    std::string LIST(std::string reference, std::string mailbox);
-    std::string FETCH(std::string folder, uint32_t messageindex, std::string item);
-    std::string FETCH_MULTI_MESSAGE(std::string folder, std::string indexRange, std::string item);
-    std::string UID_FETCH(std::string folder, uint32_t uid, std::string item);
 
     FolderList folderList();
     Uid getMessageUid(std::string folder, uint32_t messageindex);

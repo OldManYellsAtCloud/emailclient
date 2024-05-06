@@ -2,7 +2,6 @@
 
 ModelFactory::ModelFactory() {
     mengine = std::make_shared<MailEngine>();
-    //mengine->doInitialLoad();
 
     fmodel = std::make_unique<FolderModel>(mengine);
     mmodel = std::make_unique<MailModel>(mengine);

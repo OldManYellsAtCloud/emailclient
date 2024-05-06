@@ -24,7 +24,8 @@ set(HEADERS include/mailsettings.h
             include/parsers/imap/bodystructures.h
             include/mailengine.h
             include/models/mailmodel.h
-            include/models/modelfactory.h)
+            include/models/modelfactory.h
+            include/imaprequests.h )
 
 set(SOURCES src/mailsettings.cpp
             src/curlresponse.cpp
@@ -41,7 +42,8 @@ set(SOURCES src/mailsettings.cpp
             src/parsers/imap/bodystructures.cpp
             src/parsers/imap/flags.cpp
             src/models/modelfactory.cpp
-            src/models/mailmodel.cpp)
+            src/models/mailmodel.cpp
+            src/imaprequests.cpp)
 
 qt_add_executable(emailclient
     main.cpp
@@ -86,7 +88,8 @@ if (enable_test)
 
     set(TEST_SOURCES tests/mailstructure_test.cpp
                      tests/mailengine_test.cpp
-                     tests/misc_test.cpp)
+                     tests/misc_test.cpp
+                     tests/gmail_integration_tests.cpp)
 
     add_executable(mailclient_test ${HEADERS} ${SOURCES} ${TEST_SOURCES}
     include/models/foldermodel.h src/models/foldermodel.cpp

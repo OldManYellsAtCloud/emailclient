@@ -7,7 +7,7 @@ int Examine::parseInt(std::string s)
     try {
         return stoi(s);
     } catch (std::exception e) {
-        ERROR("Could not parse string as int: {}, error: {}", s, e.what());
+        ERROR("Could not parse string as int: {}, error: {}", s, *e.what());
         return -1;
     }
 }

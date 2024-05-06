@@ -79,14 +79,14 @@ std::string extractId(std::string structure){
 }
 
 PartType getPartType(std::string partTypeString){
-    DEBUG("Trying to parse {} into PartType", partTypeString);
+    DBG("Trying to parse {} into PartType", partTypeString);
     if (partTypeString == "TEXT")
         return PartType::TEXT;
     return PartType::NA;
 }
 
 PartSubType getPartSubType(std::string partSubTypeString){
-    DEBUG("Trying to parse {} into PartSubType", partSubTypeString);
+    DBG("Trying to parse {} into PartSubType", partSubTypeString);
     if (partSubTypeString == "PLAIN")
         return PartSubType::PLAIN;
     if (partSubTypeString == "HTML")

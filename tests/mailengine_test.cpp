@@ -5,14 +5,14 @@
 
 TEST(MailEngineSuite, NOOP_Request){
     GTEST_SKIP();
-    MailEngine me{};
-    EXPECT_TRUE(me.NOOP()) << "End of the world. NOOP failed.";
+    ImapRequest ir{};
+    EXPECT_TRUE(ir.NOOP()) << "End of the world. NOOP failed.";
 }
 
 TEST(MailEngineSuite, CAPABILITY_Request){
     GTEST_SKIP();
-    MailEngine me{};
-    Capability ret = me.CAPABILITY();
+    ImapRequest ir{};
+    Capability ret = ir.CAPABILITY();
     EXPECT_TRUE(ret.isSuccess()) << "Capability request failed. Missing config, or broken internet?";
 // IMAP4rev1 LITERAL+ UIDPLUS SORT IDLE MOVE QUOTA
     std::vector<std::string> expected_capabilities;
@@ -46,15 +46,15 @@ TEST(MailEngineSuite, CAPABILITY_Request){
 
 TEST(MailEngineSuite, ENABLE_Request){
     GTEST_SKIP() << "GreenMail does not support ENABLE request";
-    MailEngine me{};
-    bool ret = me.ENABLE("UIDPLUS");
+    ImapRequest ir{};
+    bool ret = ir.ENABLE("UIDPLUS");
     EXPECT_TRUE(ret) << "ENABLE command wasn't accepted.";
 }
 
 TEST(MailEngineSuite, EXAMINE_Request){
     GTEST_SKIP();
-    MailEngine me{};
-    Examine ret = me.EXAMINE("INBOX");
+    ImapRequest ir{};
+    Examine ret = ir.EXAMINE("INBOX");
     EXPECT_TRUE(ret.isSuccess()) << "Unsuccessful EXAMINE request!";
     EXPECT_EQ(ret.getExists(), 2) << "Incorrect folder status";
     EXPECT_EQ(ret.getRecent(), 2) << "Incorrect folder status";
@@ -87,8 +87,9 @@ TEST(MailEngineSuite, LIST_Folders_Request){
 
 TEST(MailEngineSuite, FETCH_uid_request){
     GTEST_SKIP();
+    ImapRequest ir{};
     MailEngine me{};
-    auto examineResponse = me.EXAMINE("INBOX");
+    auto examineResponse = ir.EXAMINE("INBOX");
     int lastMessageIndex = examineResponse.getExists();
     auto response = me.getMessageUid("INBOX", lastMessageIndex);
     EXPECT_TRUE(response.isSuccess()) << "Could not get the UID of the test message!";
@@ -97,8 +98,9 @@ TEST(MailEngineSuite, FETCH_uid_request){
 
 TEST(MailEngineSuite, FETCH_uid_wrong_folder){
     GTEST_SKIP();
+    ImapRequest ir{};
     MailEngine me{};
-    auto examineresponse = me.EXAMINE("INBOX");
+    auto examineresponse = ir.EXAMINE("INBOX");
     int lastMessageIndex = examineresponse.getExists();
     auto response = me.getMessageUid("BAD_INBOX", lastMessageIndex);
     EXPECT_FALSE(response.isSuccess()) << "Incorrect UID response, it somehow succeeded?";
@@ -106,8 +108,9 @@ TEST(MailEngineSuite, FETCH_uid_wrong_folder){
 
 TEST(MailEngineSuite, FETCH_uid_wrong_messageindex){
     GTEST_SKIP();
+    ImapRequest ir{};
     MailEngine me{};
-    auto examineresponse = me.EXAMINE("INBOX");
+    auto examineresponse = ir.EXAMINE("INBOX");
     int lastMessageIndex = examineresponse.getExists();
     auto response = me.getMessageUid("INBOX", lastMessageIndex + 5);
     EXPECT_FALSE(response.isSuccess()) << "Incorrect UID response, it succeeded with incorrect mailindex!";
@@ -115,8 +118,9 @@ TEST(MailEngineSuite, FETCH_uid_wrong_messageindex){
 
 TEST(MailEngineSuite, FETCH_header_request){
     GTEST_SKIP();
+    ImapRequest ir{};
     MailEngine me{};
-    auto examineresponse = me.EXAMINE("INBOX");
+    auto examineresponse = ir.EXAMINE("INBOX");
     int lastMessageIndex = examineresponse.getExists();
     MailHeader headers = me.getMessageHeaders("INBOX", lastMessageIndex);
     EXPECT_EQ(headers.getFrom(), "dick.grayson@gotham.us");
@@ -133,8 +137,9 @@ TEST(MailEngineSuite, FETCH_header_request){
 
 TEST(MailEngineSuite, FETCH_bodystructure_request){
     GTEST_SKIP();
+    ImapRequest ir{};
     MailEngine me{};
-    auto examineresponse = me.EXAMINE("INBOX");
+    auto examineresponse = ir.EXAMINE("INBOX");
     int lastMessageIndex = examineresponse.getExists();
     BodyStructures ret = me.getBodyStructure("INBOX", lastMessageIndex);
 
@@ -155,8 +160,9 @@ TEST(MailEngineSuite, FETCH_bodystructure_request){
 
 TEST(MailEngineSuite, FETCH_textbody_request){
     GTEST_SKIP();
+    ImapRequest ir{};
     MailEngine me{};
-    auto examineResponse = me.EXAMINE("INBOX");
+    auto examineResponse = ir.EXAMINE("INBOX");
     int lastMessageIndex = examineResponse.getExists();
     std::string ret = me.getTextBody("INBOX", lastMessageIndex);
     std::string expectedResponse = "There should be a text attachment somewhere around";
@@ -165,8 +171,9 @@ TEST(MailEngineSuite, FETCH_textbody_request){
 
 TEST(MailEngineSuite, FETCH_flags){
     GTEST_SKIP();
+    ImapRequest ir{};
     MailEngine me{};
-    auto examineResponse = me.EXAMINE("INBOX");
+    auto examineResponse =ir.EXAMINE("INBOX");
     int lastMessageIndex = examineResponse.getExists();
     auto uid = me.getMessageUid("INBOX", lastMessageIndex);
     auto a = me.getMessageFlags("INBOX", lastMessageIndex);

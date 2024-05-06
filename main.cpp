@@ -36,13 +36,13 @@ void checkProcessOwner(int argc, char *argv[]){
             exit(1);
         }
 
-        if(setuid(appUserUid->pw_uid) < 0){
-            ERROR("Could not set UID to application user! Error: {}", strerror(errno));
+        if (setgid(appUserUid->pw_gid) < 0){
+            ERROR("Could not set GID to application user's group! Error: {}", strerror(errno));
             exit(1);
         }
 
-        if (setgid(appUserUid->pw_gid) < 0){
-            ERROR("Could not set GID to application user's group! Error: {}", strerror(errno));
+        if(setuid(appUserUid->pw_uid) < 0){
+            ERROR("Could not set UID to application user! Error: {}", strerror(errno));
             exit(1);
         }
 

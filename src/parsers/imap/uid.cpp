@@ -12,7 +12,7 @@ Uid::Uid(std::string s)
         try {
             uid = stoi(match[1]);
         } catch(std::exception e){
-            ERROR("Could not parse UID! Error: {}, Response: {}", *e.what(), s);
+            ERROR("Could not parse UID! Error: {}, Response: {}", e.what(), s);
             success = false;
         }
     } else {

@@ -245,7 +245,7 @@ int MailEngine::fetchNewMails(std::string folder)
     int numberOfMailsInFolder = imapRequest->EXAMINE(folder).getExists();
     Uid lastOnlineUid = getMessageUid(folder, numberOfMailsInFolder);
     LOG("Last cached UID: {}, folder: {}", *lastCachedUid, folder);
-    LOG("Last online UID: {}", lastOnlineUid.getUid())
+    LOG("Last online UID: {}", lastOnlineUid.getUid());
 
     while (lastOnlineUid.getUid() != *lastCachedUid){
 

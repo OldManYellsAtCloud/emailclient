@@ -17,6 +17,7 @@ Rectangle {
         anchors.fill: parent
         onClicked: {
             modelFactory.getMailModel().setFolder(folderLabel.text)
+            modelFactory.getMailModel().fetchNewMailsFromFolder(folderLabel.text);
             drawer.close()
         }
     }

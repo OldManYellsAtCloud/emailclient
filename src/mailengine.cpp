@@ -276,7 +276,8 @@ std::string MailEngine::getTextBody(std::string folder, uint32_t messageindex)
     BodyStructures bodyStructure = getBodyStructure(folder, messageindex);
     // TODO: store separate HTML and TEXT? let's see if it will be ever needed...
     int textOrHtmlBodyIndex = getBodyStructureIndex(bodyStructure, "TEXT", "PLAIN") + 1; // IMAP uses 1-based indexing
-    std::string peekCommand = std::format("BODY.PEEK[{}]", textOrHtmlBodyIndex);
+    //std::string peekCommand = std::format("BODY.PEEK[{}]", textOrHtmlBodyIndex);
+    std::string peekCommand = "BODY.PEEK[TEXT]";
 
     FETCH(folder, messageindex, peekCommand);
     std::string textBodyResponse = header.getResponse();
@@ -320,14 +321,13 @@ std::map<uint32_t, Flags> MailEngine::getMessageFlagsForMultipleMails(std::strin
     return ret;
 }
 
-mail MailEngine::getMail(std::string folder, uint32_t messageindex)
+mail MailEngine::getMail(std::string folder, uint32_t messageindex, bool ignoreCache)
 {
     mail ret;
     Uid uid = getMessageUid(folder, messageindex);
-    if (dbEngine->isMailStored(folder, uid.getUid())) {
+    if (!ignoreCache && dbEngine->isMailStored(folder, uid.getUid())) {
         return dbEngine->retrieveEmail(folder, uid.getUid());
     } else {
-
         auto header = getMessageHeaders(folder, messageindex);
         auto body = getTextBody(folder, messageindex);
         auto flags = getMessageFlags(folder, messageindex).getFlags();
@@ -342,7 +342,8 @@ mail MailEngine::getMail(std::string folder, uint32_t messageindex)
         ret.setFolder(folder);
         ret.setRead(read);
 
-        dbEngine->storeEmail(ret);
+        if (!ignoreCache)
+            dbEngine->storeEmail(ret);
 
         emit newMailFetched(folder);
 
@@ -417,7 +418,9 @@ int MailEngine::fetchNewMails(std::string folder)
 {
     int fetchedEmails = 0;
     std::vector<int> cachedUids = dbEngine->retreiveUidsFromFolder(folder);
-    std::vector<int>::iterator lastCachedUid = std::max_element(cachedUids.begin(), cachedUids.end());
+    std::vector<int>::iterator lastCachedUid;
+    if (cachedUids.size() == 0)
+        cachedUids.push_back(0);
 
     int numberOfMailsInFolder = EXAMINE(folder).getExists();
     Uid lastOnlineUid = getMessageUid(folder, numberOfMailsInFolder);

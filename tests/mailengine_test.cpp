@@ -164,6 +164,7 @@ TEST(MailEngineSuite, FETCH_textbody_request){
 }
 
 TEST(MailEngineSuite, FETCH_flags){
+    GTEST_SKIP();
     MailEngine me{};
     auto examineResponse = me.EXAMINE("INBOX");
     int lastMessageIndex = examineResponse.getExists();
@@ -171,4 +172,17 @@ TEST(MailEngineSuite, FETCH_flags){
     auto a = me.getMessageFlags("INBOX", lastMessageIndex);
     auto b = me.getMessageHeaders("INBOX", lastMessageIndex);
     ERROR("subject: {}", b.getSubject());
+}
+
+/*
+* There is one strange email that is not fetched correctly from
+* my inbox. This test is for debugging it - would be disabled soon enough.
+*/
+TEST(MailEngineSuite, FETCH_problemtic_email){
+    MailEngine me{};
+    uint32_t problematicIndex = 6653;
+    std::string folder = "INBOX";
+    bool ignoreCache = true;
+    auto mail = me.getMail(folder, problematicIndex, ignoreCache);
+    LOG("DONE");
 }

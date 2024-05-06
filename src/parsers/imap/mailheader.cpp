@@ -72,7 +72,7 @@ MailHeader::MailHeader(std::string s)
         subject = match[1];
 
     if (std::regex_search(s.cbegin(), s.cend(), match, dateRegex)){
-        LOG("This is the date I found: {}", match[1].str());
+        LOG("Date parsed from mail header: {}", match[1].str());
         auto d = match[1].str();
         date = dateStringToInt(d);
     }

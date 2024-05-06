@@ -23,6 +23,4 @@ Item {
         url: "file:///tmp/emailbody.html"
         settings.javaScriptEnabled: false
     }
-
-
 }

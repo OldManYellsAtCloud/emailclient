@@ -13,7 +13,9 @@ void MailModel::exportBody(int idx)
     QFile f{BODY_FILE_PATH};
     f.open(QIODevice::ReadWrite | QIODevice::Truncate);
     QTextStream qts(&f);
+    qts << "<pre>";
     qts << QString::fromStdString(bodyContent);
+    qts << "</pre>";
     f.close();
 }
 
@@ -45,7 +47,21 @@ void MailModel::setFolder(QString newFolder)
 void MailModel::fetchNewMails()
 {
     LOG("Fetching new mails...");
+    busyLoading = true;
+    emit busyLoadingChanged();
     mengine->fetchMailsFromWatchedFolders();
+    busyLoading = false;
+    emit busyLoadingChanged();
+}
+
+void MailModel::fetchNewMailsFromFolder(QString folder)
+{
+    LOG("Fetching new mails from {} folder", folder.toStdString());
+    busyLoading = true;
+    emit busyLoadingChanged();
+    mengine->fetchNewMails(folder.toStdString());
+    busyLoading = false;
+    emit busyLoadingChanged();
 }
 
 void MailModel::setUnreadMailFlag()
@@ -98,6 +114,11 @@ void MailModel::clearModel()
     emit beginRemoveRows(QModelIndex(), 0, mails.size() - 1);
     mails.clear();
     emit endRemoveRows();
+}
+
+bool MailModel::isBusyLoading()
+{
+    return busyLoading;
 }
 
 void MailModel::newMailFetched(std::string newMailFolder)

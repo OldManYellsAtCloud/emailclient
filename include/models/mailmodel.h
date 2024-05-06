@@ -11,10 +11,12 @@
 class MailModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(bool busyLoading READ isBusyLoading NOTIFY busyLoadingChanged)
     std::shared_ptr<MailEngine> mengine;
     QString folder;
     QHash<int, QByteArray> m_roleNames;
     std::vector<mail> mails;
+    bool busyLoading;
 
 
 public:
@@ -22,6 +24,7 @@ public:
     MailModel(QObject *parent);
     Q_INVOKABLE void setFolder(QString newFolder);
     Q_INVOKABLE void fetchNewMails();
+    Q_INVOKABLE void fetchNewMailsFromFolder(QString folder);
     Q_INVOKABLE void setUnreadMailFlag();
     Q_INVOKABLE void exportBody(int idx);
 
@@ -29,6 +32,8 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
     void clearModel();
+
+    bool isBusyLoading();
 
     enum RoleNames {
         subjectRole = Qt::UserRole,
@@ -40,6 +45,8 @@ public:
 public slots:
     void newMailFetched(std::string newMailFolder);
 
+signals:
+    void busyLoadingChanged();
 };
 
 #endif // MAILMODEL_H

@@ -64,7 +64,7 @@ public:
     Flags getMessageFlags(std::string folder, uint32_t messageindex);
     std::map<uint32_t, Flags> getMessageFlagsForMultipleMails(std::string folder, uint32_t startIndex, uint32_t endIndex);
 
-    mail getMail(std::string folder, uint32_t messageindex);
+    mail getMail(std::string folder, uint32_t messageindex, bool ignoreCache = false);
 
     int fetchAllMails(std::string folder);
     void doInitialLoad();
